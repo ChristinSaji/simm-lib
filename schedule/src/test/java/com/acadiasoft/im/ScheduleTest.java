@@ -23,7 +23,9 @@
 package com.acadiasoft.im;
 
 import com.acadiasoft.im.base.fx.FxRate;
+import com.acadiasoft.im.schedule.config.DefaultScheduleConfigBuilder;
 import com.acadiasoft.im.schedule.config.ScheduleConfig;
+import com.acadiasoft.im.schedule.config.ScheduleConfigBuilder;
 import com.acadiasoft.im.schedule.engine.Schedule;
 import com.acadiasoft.im.schedule.models.DefaultScheduleSensitivity;
 import com.acadiasoft.im.schedule.models.ScheduleNotional;
@@ -36,11 +38,39 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 
+import static org.mockito.Mockito.mock;
+
 /**
  *
  * @author alec.stewart
  */
 public class ScheduleTest {
+
+  @Test
+  public void testFxRateNonNull() {
+    //Arrange
+    ScheduleConfigBuilder builder = new DefaultScheduleConfigBuilder();
+    FxRate newFxRate = mock(FxRate.class);
+
+    //Act
+    builder.fxRate(newFxRate);
+
+    //Assert
+    Assert.assertEquals(newFxRate, builder.fxRate());
+  }
+
+  @Test
+  public void testFxRateNull() {
+    //Arrange
+    ScheduleConfigBuilder builder = new DefaultScheduleConfigBuilder();
+    FxRate initialFxRate = builder.fxRate();
+
+    //Act
+    builder.fxRate(null);
+
+    //Assert
+    Assert.assertEquals(initialFxRate, builder.fxRate());
+  }
 
   @Test
   public void testNettingWorksAsExpected() {
