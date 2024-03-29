@@ -60,9 +60,13 @@ public class BasicImTree implements ImTree<BasicIdentifier, BasicImTree> {
     this.level = tree.getTreeLevel();
     this.margin = tree.getMargin();
     this.identifier = tree.getMarginIdentifier().getMarginIdentifier();
-    this.children = tree.getChildren().stream()
-        // FIXME: why does compiler require this cast??? should be redundant...
-        .map(t -> new BasicImTree((ImTree<MarginIdentifier, ImTree>) t)).collect(Collectors.toList());
+    this.children = transformChildren(tree.getChildren());
+  }
+
+  private List<BasicImTree> transformChildren(List<? extends ImTree> children) {
+    return children.stream()
+            .map(child -> new BasicImTree((ImTree<MarginIdentifier, ImTree>) child))
+            .collect(Collectors.toList());
   }
 
   @Override
