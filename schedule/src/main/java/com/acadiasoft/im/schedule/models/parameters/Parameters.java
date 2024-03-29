@@ -26,6 +26,10 @@ import com.acadiasoft.im.schedule.models.imtree.identifiers.ScheduleProductClass
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+import static com.acadiasoft.im.schedule.models.imtree.identifiers.ScheduleProductClass.CREDIT;
+import static com.acadiasoft.im.schedule.models.imtree.identifiers.ScheduleProductClass.RATES;
 
 /**
  *
@@ -48,33 +52,41 @@ public class Parameters implements ScheduleParameters {
 
   @Override
   public BigDecimal getParameter(ScheduleProductClass productClass, LocalDate val, LocalDate end) {
-    if (productClass.equals(ScheduleProductClass.RATES)) {
-      if (end.minusYears(TWO_YEARS).isBefore(val) || end.minusYears(TWO_YEARS).isEqual(val)) {
-        return RATES_UNDER_2_YEARS;
-      } else if (end.minusYears(FIVE_YEARS).isBefore(val) || end.minusYears(FIVE_YEARS).isEqual(val)) {
-        return RATES_2_TO_5_YEARS;
-      } else {
-        return RATES_OVER_5_YEARS;
-      }
-    } else if (productClass.equals(ScheduleProductClass.CREDIT)) {
-      if (end.minusYears(TWO_YEARS).isBefore(val) || end.minusYears(TWO_YEARS).isEqual(val)) {
-        return CREDIT_UNDER_2_YEARS;
-      } else if (end.minusYears(FIVE_YEARS).isBefore(val) || end.minusYears(FIVE_YEARS).isEqual(val)) {
-        return CREDIT_2_TO_5_YEARS;
-      } else {
-        return CREDIT_OVER_5_YEARS;
-      }
-    } else if (productClass.equals(ScheduleProductClass.FX)) {
-      return FX;
-    } else if (productClass.equals(ScheduleProductClass.EQUITY)) {
-      return EQUITY;
-    } else if (productClass.equals(ScheduleProductClass.COMMODITY)) {
-      return COMMODITY;
-    } else if (productClass.equals(ScheduleProductClass.OTHER)) {
-      return OTHER;
-    } else {
-      // Should never get here
+      if (productClass.equals(RATES)) {
+          return getRatesParameter(val, end);
+      } else if (productClass.equals(CREDIT)) {
+          return getCreditParameter(val, end);
+      } else if (productClass.equals(FX)) {
+          return FX;
+      } else if (productClass.equals(EQUITY)) {
+          return EQUITY;
+      } else if (productClass.equals(COMMODITY)) {
+          return COMMODITY;
+      } else if (productClass.equals(OTHER)) {
+          return OTHER;
+      }// Should never get here
       return null;
+  }
+
+  private BigDecimal getRatesParameter(LocalDate val, LocalDate end) {
+    long yearsBetween = ChronoUnit.YEARS.between(val, end);
+    if (yearsBetween <= TWO_YEARS) {
+      return RATES_UNDER_2_YEARS;
+    } else if (yearsBetween <= FIVE_YEARS) {
+      return RATES_2_TO_5_YEARS;
+    } else {
+      return RATES_OVER_5_YEARS;
+    }
+  }
+
+  private BigDecimal getCreditParameter(LocalDate val, LocalDate end) {
+    long yearsBetween = ChronoUnit.YEARS.between(val, end);
+    if (yearsBetween <= TWO_YEARS) {
+      return CREDIT_UNDER_2_YEARS;
+    } else if (yearsBetween <= FIVE_YEARS) {
+      return CREDIT_2_TO_5_YEARS;
+    } else {
+      return CREDIT_OVER_5_YEARS;
     }
   }
 
