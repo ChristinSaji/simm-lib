@@ -23,8 +23,7 @@
 package com.acadiasoft.im.simm.model.param.cq;
 
 import com.acadiasoft.im.simm.model.imtree.identifiers.WeightingClass;
-import com.acadiasoft.im.simm.model.param.SimmRiskWeightBaseCorr;
-import com.acadiasoft.im.simm.model.param.SimmSensitivityCorrelationBaseCorr;
+import com.acadiasoft.im.simm.model.param.BaseCorrRiskStrategy;
 
 import java.math.BigDecimal;
 
@@ -32,7 +31,7 @@ import java.math.BigDecimal;
  * @author joe.peterson
  *
  */
-public class BaseCorrRisk implements SimmRiskWeightBaseCorr, SimmSensitivityCorrelationBaseCorr {
+public class BaseCorrRisk implements BaseCorrRiskStrategy {
 
   @Override
   public BigDecimal getRiskWeight(WeightingClass w) {
