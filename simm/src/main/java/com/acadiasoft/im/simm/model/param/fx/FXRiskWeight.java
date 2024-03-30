@@ -36,10 +36,7 @@ import java.util.Map;
  * @author joe.peterson
  *
  */
-public class FXRiskWeight implements SimmFxRiskWeight {
-
-  private static final BigDecimal VEGA = new BigDecimal("0.47");
-
+public class FXRiskWeight extends AbstractFXRiskWeight {
   private static final Map<FXCurrencyVolatility, Map<FXCurrencyVolatility, BigDecimal>> WEIGHTS = new HashMap<>();
   private static final Map<FXCurrencyVolatility, BigDecimal> REGULAR = new HashMap<>();
   private static final Map<FXCurrencyVolatility, BigDecimal> HIGH = new HashMap<>();
@@ -55,6 +52,11 @@ public class FXRiskWeight implements SimmFxRiskWeight {
   }
 
   @Override
+  protected BigDecimal getVegaValue() {
+    return new BigDecimal("0.47");
+  }
+
+  @Override
   public BigDecimal getDeltaRiskWeight(WeightingClass s, String calculationCurrency) {
     FXCurrencyVolatility calcCurrencyVolatility = FXCurrencyVolatility.get(calculationCurrency);
     FXCurrencyVolatility fxCurrencyVolatility = FXCurrencyVolatility.get(s.getQualifier());
@@ -66,10 +68,4 @@ public class FXRiskWeight implements SimmFxRiskWeight {
     FXCurrencyVolatility ccy2Volatility = FXCurrencyVolatility.get(ccy2);
     return WEIGHTS.get(ccy1Volatility).get(ccy2Volatility);
   }
-
-  @Override
-  public BigDecimal getVegaRiskWeight(WeightingClass s, String calculationCurrency) {
-    return VEGA;
-  }
-
 }
