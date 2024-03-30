@@ -32,6 +32,7 @@ import java.util.Collections;
 public class BlankImTree extends TotalMargin {
 
   private static final long serialVersionUID = 1L;
+  private static final BlankImTree instance = new BlankImTree();
 
   private BlankImTree() {
     super(BigDecimal.ZERO, Collections.emptyList());
@@ -39,6 +40,10 @@ public class BlankImTree extends TotalMargin {
 
   public static BlankImTree buildTree() {
     return new BlankImTree();
+  }
+
+  public static BlankImTree getInstance() {
+    return instance;
   }
 
 }

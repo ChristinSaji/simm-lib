@@ -27,8 +27,6 @@ import com.acadiasoft.im.base.model.imtree.identifiers.TotalClass;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class TotalMargin implements ImTree<TotalClass, ModelMargin> {
@@ -41,25 +39,6 @@ public class TotalMargin implements ImTree<TotalClass, ModelMargin> {
   protected TotalMargin(BigDecimal margin, List<ModelMargin> children) {
     this.margin = margin;
     this.children.addAll(children);
-  }
-
-  public static TotalMargin build(ModelMargin child) {
-    if (child.isMarginZero()) {
-      return BlankImTree.buildTree();
-    } else {
-      return new TotalMargin(child.getMargin(), Collections.singletonList(child));
-    }
-  }
-
-  public static TotalMargin build(ModelMargin one, ModelMargin two) {
-    if (one.isMarginZero()) {
-      return TotalMargin.build(two);
-    } else if (two.isMarginZero()) {
-      return TotalMargin.build(one);
-    } else {
-      BigDecimal sum = one.getMargin().add(two.getMargin());
-      return new TotalMargin(sum, Arrays.asList(one, two));
-    }
   }
 
   @Override
