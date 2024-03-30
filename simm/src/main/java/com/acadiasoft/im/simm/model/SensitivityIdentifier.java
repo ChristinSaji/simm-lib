@@ -55,13 +55,35 @@ public interface SensitivityIdentifier extends Serializable {
   String BAD_PRODUCT = "The product class was null or empty when it was required";
 
   default void checkSensitivityIdentifier(String productClass, String riskType, String qualifier, String bucket, String label1, String label2) {
-    if (riskType == null || riskType.isEmpty()) {
+    checkRiskType(riskType);
+    checkQualifier(qualifier, riskType);
+    checkProductClass(productClass);
+  }
+
+  default void checkRiskType(String riskType) {
+    if (isInvalid(riskType)) {
       throw new IllegalStateException(BAD_RISK_TYPE);
-    } else if ((qualifier == null || qualifier.isEmpty()) && !riskType.equalsIgnoreCase(AddOnSubType.ADD_ON_FIXED_AMOUNT)) {
+    }
+  }
+
+  default void checkQualifier(String qualifier, String riskType) {
+    if (isInvalid(qualifier) && !isAddOnFixedAmount(riskType)) {
       throw new IllegalStateException(BAD_QUALIFIER);
-    } else if (isSimmStandard() && (productClass == null || productClass.isEmpty())) {
+    }
+  }
+
+  default void checkProductClass(String productClass) {
+    if (isSimmStandard() && isInvalid(productClass)) {
       throw new IllegalStateException(BAD_PRODUCT);
     }
+  }
+
+  default boolean isInvalid(String value) {
+    return value == null || value.isEmpty();
+  }
+
+  default boolean isAddOnFixedAmount(String riskType) {
+    return riskType.equalsIgnoreCase(AddOnSubType.ADD_ON_FIXED_AMOUNT);
   }
 
   default boolean isAddOn() {
